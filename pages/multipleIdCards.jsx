@@ -22,20 +22,8 @@ const MultipleCards = () => {
       reader.readAsArrayBuffer(e.target.files[0]);
     }
   };
-  console.log(entireFile.current);
 
-  const handleDownload = (count) => {
-    if (imageUrl) {
-      const link = document.createElement("a");
-      link.href = imageUrl;
-      link.download = `file${count}.svg`;
-      link.click();
-    } else {
-      alert("Please Generate the ID card first");
-    }
-  };
-
-  const handleGenerate = () => {
+  const handleGenerateAndDownload = () => {
     const arrayOfDivs = Array.from(entireFile.current.children);
     arrayOfDivs.forEach((item, index) => {
       htmlToImage
@@ -48,11 +36,10 @@ const MultipleCards = () => {
         })
         .catch(function (error) {
           console.error("Error generating ID card:", error);
+          alert("Error generating ID card");
         });
     });
   };
-
-  console.log(imageUrl);
 
   return (
     <>
@@ -65,15 +52,18 @@ const MultipleCards = () => {
             onChange={readUploadFile}
           />
           <div className="flex flex-row items-center justify-between ">
-            <button onClick={handleGenerate} className="w-32">
-              Generate
-            </button>
-            <button onClick={handleDownload} className="w-32">
+            <button
+              onClick={handleGenerateAndDownload}
+              className="w-32 p-2 text-white bg-green-500 rounded-lg hover:opacity-80"
+            >
               Download
             </button>
           </div>
         </div>
-        <div ref={entireFile} className="flex flex-col gap-5 mt-5">
+        <div
+          ref={entireFile}
+          className="grid w-full lg:grid-cols-2 2xl:grid-cols-3 gap-5 mt-5  h-[70vh] overflow-y-auto py-2 px-1"
+        >
           {file.length > 0 &&
             file?.map((item, index) => (
               <div key={index}>
